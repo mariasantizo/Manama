@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="help" name="2.2_exampleRMI_Client">    
+	<property environment="env"/>
+	<property name="source.dir" location="src"/>
+   	<property name="build.dir" location="bin"/>
+	<property name="dist.dir" location="dist"/>
+	<property name="classpath" location="bin"/>
+	<property name="server.port" value="1099"/> 
+	<property name="server.IP" value="127.0.0.1"/> 
+	<property name="server.Name" value="HelloServer"/>
+	<property name="policy.file" location="security/java.policy"/>	
+
+    <path id="full.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <pathelement location="${build.dir}"/>    	
+    </path>
+	
+	<target name="help">
+		<echo>Usage: ant [build | client]</echo>
+	</target>	
+	
+	<target name="build" description="Builds the project">
+		<delete dir="${build.dir}"/>
+		<mkdir dir="${build.dir}"/>
+		<javac srcdir="${source.dir}" destdir="${build.dir}" classpath="${classpath}" deprecation="true" fork="true" includeAntRuntime="no"/>
+    </target>
+
+	<target name="client" depends="build" description="Runs the Client">
+		<java classname="es.deusto.ingenieria.sd.rmi.client.Client" classpath="${classpath}" fork="true">
+			<jvmarg value="-Djava.security.policy=${policy.file}"/>			
+        	<arg value="${server.IP}"/> 
+	 		<arg value="${server.port}"/> 
+			<arg value="${server.Name}"/> 
+        </java>
+    </target>
+</project>
